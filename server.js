@@ -99,7 +99,7 @@ function getInformations() {
 
     Promise.all([altin, doviz, bist100]).then(results => {
         const date = new Date()
-        const tarihBilgisi = `Güncelleme: ${date.getDate() + "-" + (date.getMonth() + 1) + "-" + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds()}`
+        const tarihBilgisi = `Güncelleme: ${date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds() + " " + date.getDate() + "-" + (date.getMonth() + 1) + "-" + date.getFullYear()}`
 
         const altinBilgisi = `\n\n#ALTIN ALIŞ - ${results[0].buying}\n#ALTIN SATIŞ - ${results[0].selling}`;
 
