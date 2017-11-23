@@ -121,3 +121,6 @@ function getInformations() {
         console.log(err)
     })
 }
+
+getInformations()
+console.log('\x1b[36m%s\x1b[0m', "Botumuz çalışmaya başladı...");
