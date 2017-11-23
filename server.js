@@ -19,7 +19,7 @@ if (!TwitterConfig.access_token_secret) throw new Error("Twitter access token se
 var client = new Twitter(TwitterConfig);
 
 const timer = setInterval(_ => {
-
+    getInformations()
 }, 900000)
 
 
@@ -121,11 +121,3 @@ function getInformations() {
         console.log(err)
     })
 }
-
-/**
-                
- * 
- * 
- */
-
-getInformations()
