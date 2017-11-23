@@ -112,7 +112,7 @@ function getInformations() {
                 status: `${tarihBilgisi + altinBilgisi + dovizBilgisi + bistBilgisi}`
             })
             .then(function (tweet) {
-                console.log("Tweet paylaşıldı. Alış fiyatı, " + data.buying + " ve satış fiyatı, " + data.selling)
+                console.log("Tweet paylaşıldı, ", `${tarihBilgisi + altinBilgisi + dovizBilgisi + bistBilgisi}`)
             })
             .catch(function (error) {
                 console.log(error)
