@@ -18,7 +18,7 @@ if (!TwitterConfig.access_token_secret) throw new Error("Twitter access token se
 
 var client = new Twitter(TwitterConfig);
 
-const timer = setInterval(_ => {
+const dovizTimer = setInterval(_ => {
     getInformations()
 }, 900000)
 
@@ -123,4 +123,5 @@ function getInformations() {
 }
 
 getInformations()
+
 console.log('\x1b[36m%s\x1b[0m', "Botumuz çalışmaya başladı...");
