@@ -1,6 +1,6 @@
 const Twitter = require('twitter');
 const https = require("https");
-
+const ozluSozler = require("./ozlu-sozler");
 // Gerekli apii bilgisi alınıyor...
 const TwitterConfig = {
     consumer_key: process.env.TWITTER_CONSUMER_KEY || '',
@@ -21,6 +21,20 @@ var client = new Twitter(TwitterConfig);
 const dovizTimer = setInterval(_ => {
     getInformations()
 }, 900000)
+
+// Rasgele bir ozlu soz seçip 6 saatte bir bunu paylaşıcaz. 
+const ozluSozTimer = setInterval(_=>{
+    const soz = ozluSozler[Math.floor(Math.random()*ozluSozler.length)];
+    client.post('statuses/update', {
+        status: soz
+    })
+    .then(function (tweet) {
+        console.log("Tweet paylaşıldı, ", soz)
+    })
+    .catch(function (error) {
+        console.log(error)
+    })
+}, 21600000)
 
 
 function getInformations() {
