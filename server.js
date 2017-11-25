@@ -38,6 +38,9 @@ const ozluSozTimer = setInterval(_=>{
 
 
 function getInformations() {
+    const date = new Date();
+    const day = date.getDay();
+    if((day == 6) || (day == 0)) return;
     // Altının son değerlerini alıyorum
     const altin = new Promise((resolve, reject) => {
         https.get("https://www.doviz.com/api/v1/golds/ons/latest", (res) => {
@@ -112,7 +115,7 @@ function getInformations() {
     })
 
     Promise.all([altin, doviz, bist100]).then(results => {
-        const date = new Date()
+        
         const tarihBilgisi = `Güncelleme: ${date.getHours() + ":" + date.getMinutes() + " - " + date.getDate() + "-" + (date.getMonth() + 1) + "-" + date.getFullYear()}`
 
         const altinBilgisi = `\n\n#ALTIN ALIŞ - ${results[0].buying}\n#ALTIN SATIŞ - ${results[0].selling}`;
