@@ -85,6 +85,7 @@ function getInformations() {
                     if (currenyList[el.code]) {
                         currenyList[el.code].buying = el.buying;
                         currenyList[el.code].selling = el.selling;
+                        currenyList[el.code].change_rate = el.change_rate;
                     }
                 })
                 return resolve(currenyList)
@@ -114,22 +115,43 @@ function getInformations() {
         });
     })
 
-    Promise.all([altin, doviz, bist100]).then(results => {
-        
+    const btc = new Promise((resolve, reject) => {
+        https.get("https://www.btcturk.com/api/ticker", (res) => {
+            if (res.statusCode != 200) return reject("Bağlantı problemi !")
+            let dump = ""
+            res.setEncoding('utf8');
+            res.on('data', (d) => {
+                dump += d
+            });
+
+            res.on("end", _ => {
+                var data = JSON.parse(dump);
+                resolve(data)
+            })
+
+        }).on('error', (e) => {
+            reject(e)
+        });
+    })
+
+    Promise.all([altin, doviz, bist100, btc]).then(results => {
         const tarihBilgisi = `Güncelleme: ${date.getHours() + ":" + date.getMinutes() + " - " + date.getDate() + "-" + (date.getMonth() + 1) + "-" + date.getFullYear()}`
 
         const altinBilgisi = `\n\n#ALTIN ALIŞ - ${results[0].buying}\n#ALTIN SATIŞ - ${results[0].selling}`;
 
-        const dovizBilgisi = `\n\n#USD ALIŞ - ${results[1].USD.buying}\n#USD SATIŞ - ${results[1].USD.selling}\n\n#EUR ALIŞ - ${results[1].EUR.buying}\n#EUR SATIŞ - ${results[1].EUR.selling}\n\n#GBP ALIŞ - ${results[1].GBP.buying}\n#GBP SATIŞ - ${results[1].GBP.selling}`;
+        const dolarBilgisi = `\n\n#USD ALIŞ - ${results[1].USD.buying}\n#USD SATIŞ - ${results[1].USD.selling}`
+        const euroBilgisi = `\n\n#EUR ALIŞ - ${results[1].EUR.buying}\n#EUR SATIŞ - ${results[1].EUR.selling}`
+        const sterlinBilgisi = `\n\n#GBP ALIŞ - ${results[1].GBP.buying}\n#GBP SATIŞ - ${results[1].GBP.selling}`;
 
         const bistBilgisi = `\n\n#BIST100 - ${results[2].latest}`;
 
+        const btcBilgisi = `\n\n#BTC - #TRY ${parseFloat(results[3][0].last)}`
 
         client.post('statuses/update', {
-                status: `${tarihBilgisi + altinBilgisi + dovizBilgisi + bistBilgisi}`
+                status: `${tarihBilgisi + dolarBilgisi + euroBilgisi + btcBilgisi}${bistBilgisi + altinBilgisi + sterlinBilgisi}`
             })
             .then(function (tweet) {
-                console.log("Tweet paylaşıldı, ", `${tarihBilgisi + altinBilgisi + dovizBilgisi + bistBilgisi}`)
+                console.log("Tweet paylaşıldı, ")
             })
             .catch(function (error) {
                 console.log(error)
@@ -142,3 +164,5 @@ function getInformations() {
 getInformations()
 
 console.log('\x1b[36m%s\x1b[0m', "Botumuz çalışmaya başladı...");
+
+
